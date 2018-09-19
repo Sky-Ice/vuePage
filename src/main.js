@@ -3,21 +3,11 @@
 import Vue from 'vue'
 import Layout from './components/Layout.vue'
 import VueRouter from 'vue-router'
-
+import VueResource from 'vue-resource'
+import {routes} from './router/router'
 Vue.use(VueRouter);
+Vue.use(VueResource);
 
-import IndexPage from './page/Index.vue'
-
-const routes = [
-  {
-    path: '/index',
-    component: IndexPage
-  },
-  {
-    path: '*',
-    redirect: '/index'
-  }
-]
 
 const router = new VueRouter({
   mode: 'history',
