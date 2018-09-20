@@ -9,7 +9,7 @@
     <ul class="slide-pages">
       <li @click="goTo(prevIndex)">&lt;</li>
       <li v-for="(item,index) in slides" @click="goTo(index)">
-        <a>{{index + 1}}</a>
+        <a :class="{on:index===nowIndex}">{{index + 1}}</a>
       </li>
       <li @click="goTo(nextIndex)">&gt;</li>
     </ul>
@@ -27,22 +27,24 @@
     methods: {
       goTo(index) {
         this.nowIndex = index;
+      },
+      runIndex() {
+
       }
     },
     computed: {
       prevIndex() {
         if (this.nowIndex == 0) {
-          return this.slides.length - 1
+          return this.slides.length - 1;
         } else {
-          return this.nowIndex - 1
+          return this.nowIndex - 1;
         }
       },
       nextIndex() {
-        if (this.nowIndex === this.slides.length - 1) {
-          return 0
-        }
-        else {
-          return this.nowIndex + 1
+        if (this.nowIndex == this.slides.length - 1) {
+          return 0;
+        } else {
+          return this.nowIndex + 1;
         }
       }
     },
