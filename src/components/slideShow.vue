@@ -1,8 +1,14 @@
 <template>
-  <div class="slide-show">
+  <div class="slide-show" @mouseover="clearIntervalSlides" @mouseout="slideChange">
     <div class="slide-img">
       <a :href="slides[nowIndex].href">
-        <img :src="slides[nowIndex].src">
+        <transition name="slide-trans">
+          <img v-if="isShow" :src="slides[nowIndex].src">
+        </transition>
+        <transition name="slide-trans-old">
+          <img v-if="!isShow" :src="slides[nowIndex].src">
+        </transition>
+
       </a>
     </div>
     <h2>{{slides[nowIndex].title}}</h2>
@@ -18,23 +24,42 @@
 
 <script>
   export default {
-    props: ['slides'],
+    props: {
+      slides: {
+        type: Array,
+        default: []
+      },
+      slidesTime: {
+        type: Number,
+        default: 1000
+      }
+    },
     data() {
       return {
-        nowIndex: 0
+        nowIndex: 0,
+        isShow: true
       }
     },
     methods: {
       goTo(index) {
-        this.nowIndex = index;
+        this.isShow = false;
+        setTimeout(() => {
+          this.isShow = true;
+          this.nowIndex = index;
+        },1)
       },
-      runIndex() {
-
+      slideChange() {
+        this.timer = setInterval(() => {
+          this.goTo(this.nextIndex);
+        }, this.slidesTime)
+      },
+      clearIntervalSlides() {
+        clearInterval(this.timer);
       }
     },
     computed: {
       prevIndex() {
-        if (this.nowIndex == 0) {
+        if (this.nowIndex === 0) {
           return this.slides.length - 1;
         } else {
           return this.nowIndex - 1;
@@ -49,23 +74,24 @@
       }
     },
     mounted() {
-
+      this.slideChange();
     }
   }
 </script>
 
 <style scoped>
-  .slide-trans-enter-active {
-    transition: all .5s;
+  .slide-trans-enter-active,.slide-trans-old-leave-active {
+    transition: all .5s ease;
   }
 
   .slide-trans-enter {
-    transform: translateX(900px);
+    /*transform: translateX(900px);*/
+    opacity: 1;
   }
 
   .slide-trans-old-leave-active {
-    transition: all .5s;
-    transform: translateX(-900px);
+    /*transform: translateX(-900px);*/
+    opacity: 0;
   }
 
   .slide-show {

@@ -25,7 +25,7 @@
       </div>
     </div>
     <div class="index-right">
-      <slideShow :slides="slides"></slideShow>
+      <slideShow :slides="slides" :slidesTime="slidesTime"></slideShow>
       <div class="index-board-list">
         <div class="index-board-item" v-for="(item,index) in boardList"
              :class="[{'line-last' : index % 2 != 0},'index-board-' + item.id]">
@@ -60,6 +60,7 @@
     },
     data() {
       return {
+        slidesTime: 2000,
         slides: [
           {
             src: require('../assets/slideShow/pic1.jpg'),
