@@ -5,11 +5,14 @@
         <img src="../assets/logo.png">
         <div class="head-nav">
           <ul class="nav-list">
-            <li>登录</li>
+            <li>{{ username }}</li>
+            <li v-if="username!==''" class="nav-pile">|</li>
+            <li v-if="username!==''" @click="quit">退出</li>
+            <li v-if="username=== ''" @click="loginClick">登录</li>
             <li class="nav-pile">|</li>
-            <li>注册</li>
-            <li class="nav-pile">|</li>
-            <li>关于</li>
+            <li v-if="username===''" @click="registerClick">注册</li>
+            <li v-if="username===''" class="nav-pile">|</li>
+            <li @click="aboutClick">关于</li>
           </ul>
         </div>
       </div>
@@ -22,15 +25,63 @@
     <div class="app-foot">
       <p>© 2016 fishenal MIT</p>
     </div>
+
+    <AppDialog :is-show="isShowLoginDialog" @on-close="closeDialog('isShowLoginDialog')">
+      <LoginDialog @has-log="onSuccessLog"></LoginDialog>
+    </AppDialog>
+
+    <AppDialog :is-show="isShowRegisterDialog" @on-close="closeDialog('isShowRegisterDialog')">
+      <RegisterDialog></RegisterDialog>
+    </AppDialog>
+
+    <AppDialog :is-show="isShowAboutDialog" @on-close="closeDialog('isShowAboutDialog')">
+      <AboutDialog></AboutDialog>
+    </AppDialog>
+
   </div>
 </template>
 
 <script>
+
+  import Dialog from './dialog.vue'
+  import LoginDialog from './LoginDialog.vue'
+  import RegisterDialog from './RegisterDialog.vue'
+  import AboutDialog from './AboutDialog.vue'
+
   export default {
     data() {
-      return {}
+      return {
+        isShowLoginDialog: false,
+        isShowRegisterDialog: false,
+        isShowAboutDialog: false,
+        username: ''
+      }
     },
-    methods: {}
+    methods: {
+      loginClick() {
+        this.isShowLoginDialog = true;
+      },
+      registerClick() {
+        this.isShowRegisterDialog = true;
+      },
+      aboutClick() {
+        this.isShowAboutDialog = true;
+      },
+      closeDialog(attr) {
+        this[attr] = false;
+      },
+      onSuccessLog(data) {
+        console.log(data);
+        this.closeDialog('isShowLoginDialog');
+        this.username = data.username;
+      }
+    },
+    components: {
+      AppDialog: Dialog,
+      LoginDialog: LoginDialog,
+      RegisterDialog: RegisterDialog,
+      AboutDialog: AboutDialog
+    }
   }
 </script>
 

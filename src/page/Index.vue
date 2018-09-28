@@ -25,7 +25,7 @@
       </div>
     </div>
     <div class="index-right">
-      <slideShow :slides="slides" :slidesTime="slidesTime"></slideShow>
+      <slideShow :slides="slides" :slidesTime="slidesTime" @onchange="dosomething"></slideShow>
       <div class="index-board-list">
         <div class="index-board-item" v-for="(item,index) in boardList"
              :class="[{'line-last' : index % 2 != 0},'index-board-' + item.id]">
@@ -161,6 +161,11 @@
             ]
           }
         }
+      }
+    },
+    methods:{
+      dosomething(data){
+//        console.log(data)
       }
     }
   }

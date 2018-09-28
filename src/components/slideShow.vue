@@ -2,6 +2,7 @@
   <div class="slide-show" @mouseover="clearIntervalSlides" @mouseout="slideChange">
     <div class="slide-img">
       <a :href="slides[nowIndex].href">
+
         <transition name="slide-trans">
           <img v-if="isShow" :src="slides[nowIndex].src">
         </transition>
@@ -46,7 +47,8 @@
         setTimeout(() => {
           this.isShow = true;
           this.nowIndex = index;
-        },1)
+          this.$emit('onchange', index);
+        }, 1)
       },
       slideChange() {
         this.timer = setInterval(() => {
@@ -80,7 +82,7 @@
 </script>
 
 <style scoped>
-  .slide-trans-enter-active,.slide-trans-old-leave-active {
+  .slide-trans-enter-active, .slide-trans-old-leave-active {
     transition: all .5s ease;
   }
 
@@ -123,6 +125,15 @@
     width: 100%;
     position: absolute;
     top: 0;
+    transition: all 0.5s;
+  }
+
+  .slide-img img:hover {
+    -webkit-transform: scale(1.2);
+    -moz-transform: scale(1.2);
+    -ms-transform: scale(1.2);
+    -o-transform: scale(1.2);
+    transform: scale(1.2);
   }
 
   .slide-pages {
